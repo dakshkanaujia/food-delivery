@@ -25,6 +25,8 @@ export default class Login extends Component {
             userProfileImage: null,
             userTNC: false,
             showError: false,
+            showLoginError: false, // New state variable for login errors
+            loginFormError: "", // New state variable for login error message
             userLoginEmail: "",
             userLoginPassword: "",
         }
@@ -152,11 +154,11 @@ export default class Login extends Component {
                 userCountry: userCountry,
             });
         } else {
-            this.setState({
-                showError: true,
-                registerFormError: "Please enter a valid country name.",
-                userCountry: "",
-            });
+            // this.setState({
+            //     showError: true,
+            //     registerFormError: "Please enter a valid country name.",
+            //     userCountry: "",
+            // });
         }
     }
 
@@ -258,6 +260,9 @@ export default class Login extends Component {
                 userCity: "",
             });
         } else if (!userCountry.match(userCountryFormate)) {
+            console.log("1221")
+            console.log(userCountry);
+            
             this.setState({
                 showError: true,
                 registerFormError: "Please enter a valid country name.",
@@ -314,15 +319,130 @@ export default class Login extends Component {
             propsHistory: this.props.history,
         }
         try {
+            console.log("loggin in")
             const LoginReturn = await logIn(userLoginDetails)
             // console.log(LoginReturn)
         }catch(error){
+            console.log("aahh")
+            this.setState({
+                showLoginError: true,
+                loginFormError: "Invalid email or password.",
+            })
             console.log("Error in Login => ",error)
         }
     }
 
+    // render() {
+    //     const { isRegisterForm, showError, registerFormError, userProfileImageLable, userTNC, userGender } = this.state;
+    //     return (
+    //         <div>
+    //             <div className="container-fluid register-cont1">
+    //                 <div className="">
+    //                     {/* <Navbar history={this.props.history} /> */}
+    //                     <Navbar2 history={this.props.history} />
+    //                     <div className="container register-cont1-text">
+    //                         <h1 className="text-uppercase text-white text-center mb-4"><strong>User Login / Register</strong></h1>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div className="container-fluid py-5 bg-light">
+    //                 {isRegisterForm ?
+    //                     <div className="col-lg-6 col-md-8 col-sm-12 mx-auto bg-white shadow p-4">
+    //                         <h2 className="text-center mb-4">Create an Account</h2>
+    //                         <form action="javascript:void(0)">
+    //                             <div className="form-row">
+    //                                 <div className="form-group col-md-6">
+    //                                     <label htmlFor="userFullName">Full Name</label>
+    //                                     <input type="text" className="form-control" id="userName" placeholder="Full Name" onKeyUp={(e) => this.handleUserName(e.target.value)} />
+    //                                 </div>
+    //                                 <div className="form-group col-md-6">
+    //                                     <label htmlFor="userEmail">Email</label>
+    //                                     <input type="email" className="form-control" id="userEmail" placeholder="Email" onKeyUp={(e) => this.handleUserEmail(e.target.value)} />
+    //                                 </div>
+    //                             </div>
+    //                             <div className="form-row">
+    //                                 <div className="form-group col-md-6">
+    //                                     <label htmlFor="userPassword">Password</label>
+    //                                     <input type="password" className="form-control" id="userPassword" placeholder="Password" onKeyUp={(e) => this.handleUserPassword(e.target.value)} />
+    //                                 </div>
+    //                                 <div className="form-group col-md-6">
+    //                                     <label htmlFor="userConfirmPassword">Confirm Password</label>
+    //                                     <input type="password" className="form-control" id="userConfirmPassword" placeholder="Password" onKeyUp={(e) => this.handleUserConfirmPassword(e.target.value)} />
+    //                                 </div>
+    //                             </div>
+    //                             <div className="form-row">
+    //                                 <div className="form-group col-md-6">
+    //                                     <label htmlFor="userCity">City</label>
+    //                                     <input type="text" className="form-control" id="userCity" onKeyUp={(e) => this.handleUserCity(e.target.value)} />
+    //                                 </div>
+    //                                 <div className="form-group col-md-6">
+    //                                     <label htmlFor="userCountry">Country</label>
+    //                                     <input type="text" className="form-control" id="userCountry" onKeyUp={(e) => this.handleUserCountry(e.target.value)} />
+    //                                 </div>
+    //                             </div>
+    //                             <div className="form-row">
+    //                                 <div className="form-group col-md-4">
+    //                                     <label htmlFor="userGender">Gender</label>
+    //                                     <select id="userGender" className="form-control" value={userGender} onChange={this.handleUserGender}>
+    //                                         <option defaultValue>Male</option>
+    //                                         <option>Female</option>
+    //                                     </select>
+    //                                 </div>
+    //                                 <div className="form-group col-md-2">
+    //                                     <label htmlFor="userAge">Age</label>
+    //                                     <input type="number" className="form-control" id="userAge" onKeyUp={(e) => this.handleUserAge(e.target.value)} />
+    //                                 </div>
+    //                                 <div className="form-group col-md-6">
+    //                                     <p className="mb-2">Profile Image</p>
+    //                                     <div className="custom-file">
+    //                                         <input type="file" className="custom-file-input" id="userProfileImage" onChange={this.handleUserProfileImage} />
+    //                                         <label className="custom-file-label" htmlFor="userProfileImage">{userProfileImageLable}</label>
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                             <div className="form-group">
+    //                                 <div className="custom-control custom-checkbox">
+    //                                     <input type="checkbox" className="custom-control-input" id="userTNC" defaultChecked={userTNC} onChange={this.handleUserTNC} />
+    //                                     <label className="custom-control-label" htmlFor="userTNC">Accept Terms and Conditions</label>
+    //                                 </div>
+    //                             </div>
+    //                             <p className="text-danger">{showError ? registerFormError : null}</p>
+    //                             <button type="submit" className="btn btn-warning text-uppercase mb-3" onClick={this.handleCreateAccountBtn}><b>Create an Account</b></button>
+    //                         </form>
+    //                         <p className="m-0">Already have an account? <span className="cursor-pointer text-warning" onClick={this.handleForms}>Login Here</span></p>
+    //                     </div> :
+    //                     <div className="col-lg-4 col-md-6 col-sm-12 mx-auto bg-white shadow p-4">
+    //                         <h2 className="text-center mb-4">Login Your Account</h2>
+    //                         <form action="javascript:void(0)">
+    //                             <div className="form-group">
+    //                                 <label htmlFor="userLoginEmail">Email</label>
+    //                                 <input type="email" className="form-control" id="userLoginEmail" placeholder="Email" onChange={(e) => this.setState({userLoginEmail: e.target.value})} />
+    //                             </div>
+    //                             <div className="form-group">
+    //                                 <label htmlFor="userLoginPassword">Password</label>
+    //                                 <input type="password" className="form-control" id="userLoginPassword" placeholder="Password" onChange={(e) => this.setState({userLoginPassword: e.target.value})} />
+    //                             </div>
+    //                             <button type="submit" className="btn btn-warning text-uppercase mb-3" onClick={this.handleLoginNowBtn}><b>Login Now</b></button>
+    //                         </form>
+    //                         <p className="m-0">Don't have an account yet? <span className="cursor-pointer text-warning" onClick={this.handleForms}>Create an Account</span></p>
+    //                     </div>
+    //                 }
+    //             </div>
+    //             <Footer />
+    //         </div>
+    //     );
+    // }
     render() {
-        const { isRegisterForm, showError, registerFormError, userProfileImageLable, userTNC, userGender } = this.state;
+        const { 
+            isRegisterForm, 
+            showError, 
+            registerFormError, 
+            userProfileImageLable, 
+            userTNC, 
+            userGender,
+            showLoginError,  // New state variable for login errors
+            loginFormError   // New state variable for login error message
+        } = this.state;
         return (
             <div>
                 <div className="container-fluid register-cont1">
@@ -411,6 +531,8 @@ export default class Login extends Component {
                                     <label htmlFor="userLoginPassword">Password</label>
                                     <input type="password" className="form-control" id="userLoginPassword" placeholder="Password" onChange={(e) => this.setState({userLoginPassword: e.target.value})} />
                                 </div>
+                                {/* Display login error message if showLoginError is true */}
+                                <p className="text-danger">{showLoginError ? loginFormError : null}</p>
                                 <button type="submit" className="btn btn-warning text-uppercase mb-3" onClick={this.handleLoginNowBtn}><b>Login Now</b></button>
                             </form>
                             <p className="m-0">Don't have an account yet? <span className="cursor-pointer text-warning" onClick={this.handleForms}>Create an Account</span></p>
