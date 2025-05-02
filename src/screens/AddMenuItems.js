@@ -42,6 +42,7 @@ export default class AddMenuItems extends Component {
     }
 
     async handleAddYourItemBtn() {
+        console.log("add menu item")
         const { itemTitle, itemIngredients, itemPrice, itemImage, chooseItemType, } = this.state
         if (!itemTitle) {
             this.setState({
@@ -79,6 +80,7 @@ export default class AddMenuItems extends Component {
                 itemTitle, itemIngredients, itemPrice, itemImage, chooseItemType, propsHistory: this.props.history,
             }
             try {
+                console.log("adding item")
                 const addItemReturn = await addItem(itemDetails)
                 // console.log(addItemReturn)
                 Swal.fire({
